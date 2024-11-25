@@ -1,0 +1,6 @@
+@TestArdalisSpecification.API_HostAddress = http://localhost:5170
+
+GET {{TestArdalisSpecification.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
