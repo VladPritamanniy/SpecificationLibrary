@@ -1,10 +1,11 @@
 ﻿using Ardalis.Specification.Audit;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Ardalis.Specification.EntityFrameworkCore.Audit
 {
-    public class SavingChangesHandler: ISavingChangesHandler
+    public class SavingChangesHandler : ISavingChangesHandler
     {
         public async Task UpdateAuditableEntities(DbContext eventDataContext)
         {
@@ -22,11 +23,30 @@ namespace Ardalis.Specification.EntityFrameworkCore.Audit
         {
             DateTime utcNow = DateTime.UtcNow;
 
+            var originalValues = entity.State == EntityState.Modified
+                ? await entity.GetDatabaseValuesAsync().ConfigureAwait(false)
+                : null;
+
+            var oldValues = originalValues != null
+                ? JsonConvert.SerializeObject(originalValues.Properties.ToDictionary(p => p.Name, p => originalValues[p]))
+                : null!;
+
+             var newValues = entity.State == EntityState.Added
+                ? JsonConvert.SerializeObject(
+                    entity.CurrentValues.Properties
+                        .Where(p => entity.Metadata.FindPrimaryKey()!.Properties.Any(pk => pk.Name != p.Name))
+                        .ToDictionary(p => p.Name, p => entity.CurrentValues[p]))
+                : entity.State == EntityState.Modified
+                    ? JsonConvert.SerializeObject(entity.CurrentValues.Properties.ToDictionary(p => p.Name, p => entity.CurrentValues[p]))
+                    : null!;
+
             var auditEntry = new Audits
             {
                 Id = Guid.NewGuid(),
                 Type = entity.State.ToString(),
-                Sql = "sql",
+                EntityName = entity.Entity.GetType().Name,
+                OldValues = oldValues,
+                NewValues = newValues,
                 CreatedAt = entity.State == EntityState.Added ? utcNow : null,
                 ModifiedAt = entity.State == EntityState.Added ? null : utcNow,
             };

@@ -7,7 +7,6 @@ namespace TestArdalisSpecification.Infrastructure.Data.Migrations
     /// <inheritdoc />
     public partial class Seeding : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(

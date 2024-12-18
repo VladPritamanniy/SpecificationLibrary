@@ -16,7 +16,7 @@ namespace TestArdalisSpecification.API
 
             services.AddMiniProfiler(options =>
             {
-                options.RouteBasePath = "/profiler";
+                options.RouteBasePath = "/profiler"; // https://localhost:7261/profiler/results-index
                 options.ColorScheme = StackExchange.Profiling.ColorScheme.Dark;
             }).AddEntityFramework();
 
