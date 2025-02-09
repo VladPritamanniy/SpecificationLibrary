@@ -4,10 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace TestArdalisSpecification.Infrastructure.Data.Migrations
+namespace TestArdalisSpecification.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialmigration : Migration
+    public partial class v1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,10 +17,9 @@ namespace TestArdalisSpecification.Infrastructure.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    EntityName = table.Column<string>(type: "text", nullable: false),
-                    OldValues = table.Column<string>(type: "text", nullable: true),
-                    NewValues = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: true),
+                    EntityName = table.Column<string>(type: "text", nullable: true),
+                    Json = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -30,11 +29,25 @@ namespace TestArdalisSpecification.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Offices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Location = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offices", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OfficeId = table.Column<int>(type: "integer", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     Department = table.Column<string>(type: "text", nullable: false),
@@ -43,7 +56,18 @@ namespace TestArdalisSpecification.Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Employees_Offices_OfficeId",
+                        column: x => x.OfficeId,
+                        principalTable: "Offices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_OfficeId",
+                table: "Employees",
+                column: "OfficeId");
         }
 
         /// <inheritdoc />
@@ -54,6 +78,9 @@ namespace TestArdalisSpecification.Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "Offices");
         }
     }
 }

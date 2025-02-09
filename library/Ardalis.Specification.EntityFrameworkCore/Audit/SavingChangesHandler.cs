@@ -23,15 +23,7 @@ namespace Ardalis.Specification.EntityFrameworkCore.Audit
         {
             DateTime utcNow = DateTime.UtcNow;
 
-            var originalValues = entity.State == EntityState.Modified
-                ? await entity.GetDatabaseValuesAsync().ConfigureAwait(false)
-                : null;
-
-            var oldValues = originalValues != null
-                ? JsonConvert.SerializeObject(originalValues.Properties.ToDictionary(p => p.Name, p => originalValues[p]))
-                : null!;
-
-             var newValues = entity.State == EntityState.Added
+             var json = entity.State == EntityState.Added
                 ? JsonConvert.SerializeObject(
                     entity.CurrentValues.Properties
                         .Where(p => entity.Metadata.FindPrimaryKey()!.Properties.Any(pk => pk.Name != p.Name))
@@ -45,8 +37,7 @@ namespace Ardalis.Specification.EntityFrameworkCore.Audit
                 Id = Guid.NewGuid(),
                 Type = entity.State.ToString(),
                 EntityName = entity.Entity.GetType().Name,
-                OldValues = oldValues,
-                NewValues = newValues,
+                Json = json,
                 CreatedAt = entity.State == EntityState.Added ? utcNow : null,
                 ModifiedAt = entity.State == EntityState.Added ? null : utcNow,
             };

@@ -6,7 +6,7 @@ namespace TestArdalisSpecification.Core.Services
     {
         Task<List<Employee>> GetEmployeeListAsync();
         Task<List<Employee>> GetEmployeeByNameAsync(string firstName);
-        Task<Employee> CreateEmployeeAsync(Employee employee);
+        Task CreateEmployeeAsync(Employee employee);
         Task<Employee> UpdateEmployeeAsync(Employee employee);
     }
 }

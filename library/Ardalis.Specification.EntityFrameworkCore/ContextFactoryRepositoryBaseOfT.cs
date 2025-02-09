@@ -143,6 +143,15 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
     }
 
     /// <inheritdoc/>
+    public TEntity Add(TEntity entity)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+        dbContext.Set<TEntity>().Add(entity);
+
+        return entity;
+    }
+
+    /// <inheritdoc/>
     public async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
     {
         await using var dbContext = _dbContextFactory.CreateDbContext();
@@ -160,6 +169,13 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
         dbContext.Set<TEntity>().Update(entity);
 
         await SaveChangesAsync(dbContext, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public void Update(TEntity entity)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+        dbContext.Set<TEntity>().Update(entity);
     }
 
     /// <inheritdoc/>

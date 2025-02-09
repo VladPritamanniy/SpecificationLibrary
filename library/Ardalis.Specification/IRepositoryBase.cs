@@ -26,6 +26,16 @@ public interface IRepositoryBase<T> : IReadRepositoryBase<T> where T : class
     Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Add entity without saving changes.
+    /// </summary>
+    /// <param name="entity">The entity to add.</param>
+    /// <returns>
+    /// Type T that represents the synchronous operation.
+    /// The task result contains the <typeparamref name="T" />.
+    /// </returns>
+    T Add(T entity);
+
+    /// <summary>
     /// Adds the given entities in the database
     /// </summary>
     /// <param name="entities"></param>
@@ -41,6 +51,13 @@ public interface IRepositoryBase<T> : IReadRepositoryBase<T> where T : class
     /// <param name="entity">The entity to update.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Update entity without saving changes.
+    /// </summary>
+    /// <param name="entity">The entity to update.</param>
+    /// <returns>Type T that represents the synchronous operation.</returns>
+    void Update(T entity);
 
     /// <summary>
     /// Updates the given entities in the database

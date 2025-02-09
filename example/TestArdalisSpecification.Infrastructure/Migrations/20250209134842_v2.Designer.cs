@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TestArdalisSpecification.Infrastructure.Data;
 
 #nullable disable
 
-namespace TestArdalisSpecification.Infrastructure.Data.Migrations
+namespace TestArdalisSpecification.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250209134842_v2")]
+    partial class v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,14 +37,11 @@ namespace TestArdalisSpecification.Infrastructure.Data.Migrations
                     b.Property<string>("EntityName")
                         .HasColumnType("text");
 
+                    b.Property<string>("Json")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("NewValues")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OldValues")
-                        .HasColumnType("text");
 
                     b.Property<string>("Type")
                         .HasColumnType("text");
@@ -75,9 +75,45 @@ namespace TestArdalisSpecification.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("OfficeId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("OfficeId");
+
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("TestArdalisSpecification.Core.Entities.Office", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Offices");
+                });
+
+            modelBuilder.Entity("TestArdalisSpecification.Core.Entities.Employee", b =>
+                {
+                    b.HasOne("TestArdalisSpecification.Core.Entities.Office", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("OfficeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TestArdalisSpecification.Core.Entities.Office", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

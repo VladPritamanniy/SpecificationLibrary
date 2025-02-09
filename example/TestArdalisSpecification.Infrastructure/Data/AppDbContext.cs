@@ -14,6 +14,7 @@ namespace TestArdalisSpecification.Infrastructure.Data
         {
         }
 
+        public DbSet<Office> Offices { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Audits> Audits { get; set; } // from library
     }

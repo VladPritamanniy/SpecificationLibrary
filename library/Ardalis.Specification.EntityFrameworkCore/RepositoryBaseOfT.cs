@@ -31,6 +31,14 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     }
 
     /// <inheritdoc/>
+    public virtual T Add(T entity)
+    {
+        DbContext.Set<T>().Add(entity);
+
+        return entity;
+    }
+
+    /// <inheritdoc/>
     public virtual async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
     {
         DbContext.Set<T>().AddRange(entities);
@@ -46,6 +54,12 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
         DbContext.Set<T>().Update(entity);
 
         await SaveChangesAsync(cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public virtual void Update(T entity)
+    {
+        DbContext.Set<T>().Update(entity);
     }
 
     /// <inheritdoc/>

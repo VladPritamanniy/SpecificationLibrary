@@ -36,7 +36,7 @@ namespace TestArdalisSpecification.API
             var app = builder.Build();
             app.UseMiniProfiler();
             var migrationTask = app.Services.MigrateDatabaseAsync();
-            
+
             app.UseSwagger();
             app.UseSwaggerUI();
             app.UseHttpsRedirection();

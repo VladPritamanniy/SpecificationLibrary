@@ -13,6 +13,7 @@ namespace TestArdalisSpecification.Application.Services
         {
             _employeeRepository = employeeRepository;
         }
+
         public async Task<List<Employee>> GetEmployeeListAsync()
         {
             return await _employeeRepository.ListAsync();
@@ -23,9 +24,19 @@ namespace TestArdalisSpecification.Application.Services
             return await _employeeRepository.ListAsync(new EmployeeByNameSpecification(firstName));
         }
 
-        public async Task<Employee> CreateEmployeeAsync(Employee employee)
+        public async Task CreateEmployeeAsync(Employee employee)
         {
-            return await _employeeRepository.AddAsync(employee);
+            var employee1 = new Employee
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                JobTitle = "Software Developer",
+                Department = "IT",
+                OfficeId = employee.OfficeId
+            };
+            _employeeRepository.Add(employee);
+            _employeeRepository.Add(employee1);
+            await _employeeRepository.SaveChangesAsync();
         }
 
         public async Task<Employee> UpdateEmployeeAsync(Employee employee)

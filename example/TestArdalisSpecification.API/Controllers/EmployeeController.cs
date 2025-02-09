@@ -8,7 +8,6 @@ namespace TestArdalisSpecification.API.Controllers
     [Route("api/[controller]/[action]")]
     public class EmployeeController : ControllerBase
     {
-
         private readonly ILogger<EmployeeController> _logger;
         private readonly IEmployeeService _employeeService;
 
@@ -33,8 +32,8 @@ namespace TestArdalisSpecification.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEmployeeAsync([FromBody] Employee employee)
         {
-
-            return Ok(await _employeeService.CreateEmployeeAsync(employee));
+            await _employeeService.CreateEmployeeAsync(employee);
+            return Ok();
         }
 
         [HttpPatch]
