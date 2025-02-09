@@ -1,3 +1,3 @@
 # SpecificationLibrary
 
-My own project to improve the existing Ardalis.Specification library.
+A library that implements the Specification and Repository patterns for creating a data access layer.
