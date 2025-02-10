@@ -188,6 +188,13 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
     }
 
     /// <inheritdoc/>
+    public void Delete(TEntity entity)
+    {
+        using var dbContext = _dbContextFactory.CreateDbContext();
+        dbContext.Set<TEntity>().Remove(entity);
+    }
+
+    /// <inheritdoc/>
     public async Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
         await using var dbContext = _dbContextFactory.CreateDbContext();

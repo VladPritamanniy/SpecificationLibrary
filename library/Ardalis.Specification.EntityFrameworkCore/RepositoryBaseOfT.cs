@@ -71,6 +71,12 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     }
 
     /// <inheritdoc/>
+    public virtual void Delete(T entity)
+    {
+        DbContext.Set<T>().Remove(entity);
+    }
+
+    /// <inheritdoc/>
     public virtual async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
     {
         DbContext.Set<T>().Remove(entity);

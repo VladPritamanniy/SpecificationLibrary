@@ -26,16 +26,7 @@ namespace TestArdalisSpecification.Application.Services
 
         public async Task CreateEmployeeAsync(Employee employee)
         {
-            var employee1 = new Employee
-            {
-                FirstName = "John",
-                LastName = "Doe",
-                JobTitle = "Software Developer",
-                Department = "IT",
-                OfficeId = employee.OfficeId
-            };
             _employeeRepository.Add(employee);
-            _employeeRepository.Add(employee1);
             await _employeeRepository.SaveChangesAsync();
         }
 

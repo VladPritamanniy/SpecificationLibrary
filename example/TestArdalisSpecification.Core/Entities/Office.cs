@@ -1,6 +1,8 @@
-﻿namespace TestArdalisSpecification.Core.Entities
+﻿using Ardalis.Specification.Audit;
+
+namespace TestArdalisSpecification.Core.Entities
 {
-    public class Office
+    public class Office : IAuditable
     {
         public int Id { get; set; }
         public string Location { get; set; }

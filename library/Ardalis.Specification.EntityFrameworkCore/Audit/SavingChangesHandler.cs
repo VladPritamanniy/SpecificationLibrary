@@ -9,11 +9,11 @@ namespace Ardalis.Specification.EntityFrameworkCore.Audit
     {
         public async Task UpdateAuditableEntities(DbContext eventDataContext)
         {
-            var entities = eventDataContext.ChangeTracker.Entries<IAuditable>()
+            var auditableEntities = eventDataContext.ChangeTracker.Entries<IAuditable>()
                 .Where(e => e.State != EntityState.Detached && e.State != EntityState.Unchanged)
                 .ToList();
 
-            foreach (var entity in entities)
+            foreach (var entity in auditableEntities)
             {
                 await AddAuditEntryAsync(entity, eventDataContext);
             }
@@ -23,14 +23,14 @@ namespace Ardalis.Specification.EntityFrameworkCore.Audit
         {
             DateTime utcNow = DateTime.UtcNow;
 
-             var json = entity.State == EntityState.Added
-                ? JsonConvert.SerializeObject(
-                    entity.CurrentValues.Properties
-                        .Where(p => entity.Metadata.FindPrimaryKey()!.Properties.Any(pk => pk.Name != p.Name))
-                        .ToDictionary(p => p.Name, p => entity.CurrentValues[p]))
-                : entity.State == EntityState.Modified
-                    ? JsonConvert.SerializeObject(entity.CurrentValues.Properties.ToDictionary(p => p.Name, p => entity.CurrentValues[p]))
-                    : null!;
+            var json = entity.State == EntityState.Added
+               ? JsonConvert.SerializeObject(
+                   entity.CurrentValues.Properties
+                       .Where(p => entity.Metadata.FindPrimaryKey()!.Properties.Any(pk => pk.Name != p.Name))
+                       .ToDictionary(p => p.Name, p => entity.CurrentValues[p]))
+               : entity.State == EntityState.Modified || entity.State == EntityState.Deleted
+                   ? JsonConvert.SerializeObject(entity.CurrentValues.Properties.ToDictionary(p => p.Name, p => entity.CurrentValues[p]))
+                   : null!;
 
             var auditEntry = new Audits
             {

@@ -15,6 +15,12 @@ namespace Ardalis.Specification;
 public interface IRepositoryBase<T> : IReadRepositoryBase<T> where T : class
 {
     /// <summary>
+    /// Add entity without saving changes.
+    /// </summary>
+    /// <param name="entity">The entity to add.</param>
+    T Add(T entity);
+
+    /// <summary>
     /// Adds an entity in the database.
     /// </summary>
     /// <param name="entity">The entity to add.</param>
@@ -24,16 +30,6 @@ public interface IRepositoryBase<T> : IReadRepositoryBase<T> where T : class
     /// The task result contains the <typeparamref name="T" />.
     /// </returns>
     Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Add entity without saving changes.
-    /// </summary>
-    /// <param name="entity">The entity to add.</param>
-    /// <returns>
-    /// Type T that represents the synchronous operation.
-    /// The task result contains the <typeparamref name="T" />.
-    /// </returns>
-    T Add(T entity);
 
     /// <summary>
     /// Adds the given entities in the database
@@ -46,18 +42,17 @@ public interface IRepositoryBase<T> : IReadRepositoryBase<T> where T : class
     Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Update entity without saving changes.
+    /// </summary>
+    /// <param name="entity">The entity to update.</param>
+    void Update(T entity);
+
+    /// <summary>
     /// Updates an entity in the database
     /// </summary>
     /// <param name="entity">The entity to update.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Update entity without saving changes.
-    /// </summary>
-    /// <param name="entity">The entity to update.</param>
-    /// <returns>Type T that represents the synchronous operation.</returns>
-    void Update(T entity);
 
     /// <summary>
     /// Updates the given entities in the database
@@ -66,6 +61,12 @@ public interface IRepositoryBase<T> : IReadRepositoryBase<T> where T : class
     /// <param name="cancellationToken"></param>
     /// <returns>A task that represents the asynchronous operation.</returns>
     Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Removes an entity without saving changes.
+    /// </summary>
+    /// <param name="entity">The entity to delete.</param>
+    void Delete(T entity);
 
     /// <summary>
     /// Removes an entity in the database

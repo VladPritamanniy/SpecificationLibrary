@@ -11,14 +11,7 @@ namespace Ardalis.Specification.EntityFrameworkCore.Audit
             InterceptionResult<DbDataReader> result,
             CancellationToken cancellationToken = default)
         {
-            await ManipulateCommand(command);
-
-            return result;
-        }
-
-        private static async Task ManipulateCommand(DbCommand command)
-        {
-            // TODO: Implement the ManipulateCommand method
+            return result; // TODO: Implement the method
         }
     }
 }
