@@ -24,17 +24,16 @@ namespace Ardalis.Specification.EntityFrameworkCore.Audit
             return await base.SavingChangesAsync(eventData, result, cancellationToken);
         }
 
-        public override async ValueTask<int> SavedChangesAsync(
-            SaveChangesCompletedEventData eventData,
-            int result,
-            CancellationToken cancellationToken = default)
+        public override InterceptionResult<int> SavingChanges(
+            DbContextEventData eventData,
+            InterceptionResult<int> result)
         {
             if (eventData.Context is not null)
             {
-                // TODO: do something useful after save changes
+                _savingChangesHandler.UpdateAuditableEntities(eventData.Context);
             }
 
-            return await base.SavedChangesAsync(eventData, result, cancellationToken);
+            return base.SavingChanges(eventData, result);
         }
     }
 }

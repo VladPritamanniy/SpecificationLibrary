@@ -102,6 +102,12 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
     }
 
     /// <inheritdoc/>
+    public virtual int SaveChanges()
+    {
+        return DbContext.SaveChanges();
+    }
+
+    /// <inheritdoc/>
     public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await DbContext.SaveChangesAsync(cancellationToken);

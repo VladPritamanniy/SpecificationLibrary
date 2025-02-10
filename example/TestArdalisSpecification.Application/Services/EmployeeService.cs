@@ -26,8 +26,7 @@ namespace TestArdalisSpecification.Application.Services
 
         public async Task CreateEmployeeAsync(Employee employee)
         {
-            _employeeRepository.Add(employee);
-            await _employeeRepository.SaveChangesAsync();
+            await _employeeRepository.AddAsync(employee);
         }
 
         public async Task<Employee> UpdateEmployeeAsync(Employee employee)

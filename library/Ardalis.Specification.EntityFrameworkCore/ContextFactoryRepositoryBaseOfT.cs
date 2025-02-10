@@ -223,6 +223,12 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
     }
 
     /// <inheritdoc/>
+    public int SaveChanges()
+    {
+        throw new InvalidOperationException();
+    }
+
+    /// <inheritdoc/>
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         throw new InvalidOperationException();

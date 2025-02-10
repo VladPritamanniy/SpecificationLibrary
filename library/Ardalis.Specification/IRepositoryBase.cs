@@ -93,6 +93,12 @@ public interface IRepositoryBase<T> : IReadRepositoryBase<T> where T : class
     /// <summary>
     /// Persists changes to the database.
     /// </summary>
+    /// <returns>The number of state entries written to the database.</returns>
+    int SaveChanges();
+
+    /// <summary>
+    /// Persists changes to the database.
+    /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
